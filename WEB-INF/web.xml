@@ -11,4 +11,12 @@
         <servlet-name>StudentServlet</servlet-name>
         <url-pattern>/StudentServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>CursServlet</servlet-name>
+        <servlet-class>clients.CursServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CursServlet</servlet-name>
+        <url-pattern>/CursServlet</url-pattern>
+    </servlet-mapping>
 </web-app>

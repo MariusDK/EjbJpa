@@ -29,6 +29,15 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
 
         //Adauga cursurile studentului
         studentEntity.setGetCursuri(cursEntityList);
+        for (CursEntity cursEntity:cursEntityList)
+        {
+            List<StudentEntity> studentEntities = cursEntity.getStudenti();
+            studentEntities.add(studentEntity);
+            cursEntity.setStudenti(studentEntities);
+            int nrStudenti = cursEntity.getNumarStudenti();
+            nrStudenti++;
+            cursEntity.setNumarStudenti(nrStudenti);
+        }
         manager.persist(studentEntity);
     }
     @Override
