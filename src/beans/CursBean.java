@@ -127,4 +127,14 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
         cursDTO.setStudenti(studentDTOList);
         return cursDTO;
     }
+    public CursEntity convertStringToObject(String s)
+    {
+        String[] sList = s.split(" ");
+        CursEntity cursEntity = new CursEntity();
+        cursEntity.setId(Long.getLong(sList[0]));
+        cursEntity.setNume(sList[1]);
+        cursEntity.setNumeProfesor(sList[2]);
+        cursEntity.setNumarStudenti(Integer.parseInt(sList[3]));
+        return cursEntity;
+    }
 }

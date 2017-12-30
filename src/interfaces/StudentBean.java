@@ -12,4 +12,5 @@ public interface StudentBean {
     public List<StudentEntity> findAllStud();
     public StudentEntity findStud(Long id);
     public List<StudentEntity> findStudFromCurs(Long idCurs);
+    public StudentEntity convertStringToObject(String s);
 }

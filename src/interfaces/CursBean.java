@@ -1,6 +1,9 @@
 package interfaces;
 
+import dtos.CursDTO;
+import dtos.StudentDTO;
 import entities.CursEntity;
+import entities.StudentEntity;
 
 import java.util.List;
 
@@ -11,4 +14,7 @@ public interface CursBean {
     public CursEntity findCurs(Long id);
     public List<CursEntity> findAllCs();
     public List<CursEntity> findAllCursForSt(Long idStudent);
+    public StudentDTO convertEntityDTOStudent(StudentEntity studentEntity);
+    public CursDTO convertEntityDTOCurs(CursEntity cursEntity);
+    public CursEntity convertStringToObject(String s);
 }

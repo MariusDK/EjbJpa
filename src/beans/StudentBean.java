@@ -127,4 +127,14 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
         cursDTO.setStudenti(studentDTOList);
         return cursDTO;
     }
+    public StudentEntity convertStringToObject(String s)
+    {
+        String[] sList = s.split(" ");
+        StudentEntity studentEntity = new StudentEntity();
+        studentEntity.setId(Long.getLong(sList[0]));
+        studentEntity.setName(sList[1]);
+        return studentEntity;
+
+
+    }
 }
