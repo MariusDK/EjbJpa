@@ -8,8 +8,9 @@ import java.util.List;
 public interface StudentBeanR {
     public void insertStudentR(String name,List<CursDTO> cursDTOList);
     public void deleteStudentR(StudentDTO studentDTO);
-    public void updateStudentR(Long id, String Newname);
+    public void updateStudentR(int id, String Newname);
     public List<StudentDTO> findAllStudR();
-    public StudentDTO findStudR(Long id);
-    public List<StudentDTO> findStudFromCursR(Long idCurs);
+    public StudentDTO findStudR(int id);
+    public List<StudentDTO> findStudFromCursR(int idCurs);
+
 }

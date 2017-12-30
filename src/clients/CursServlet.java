@@ -7,6 +7,7 @@ import interfaces.CursBean;
 import interfaces.StudentBean;
 
 
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +20,9 @@ import java.util.List;
 @WebServlet(name = "CursServlet")
 public class CursServlet extends HttpServlet
 {
+    @EJB
     private StudentBean studentBean;
+    @EJB
     private CursBean cursBean;
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("NAME");

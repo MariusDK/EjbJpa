@@ -8,18 +8,17 @@ import java.util.List;
 public class StudentEntity implements Serializable{
     @Id
     @GeneratedValue
-    @Column(name = "ID")
-    private Long id = 1L;
+    private int id ;
     private String name = "";
 
 
 
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -30,18 +29,18 @@ public class StudentEntity implements Serializable{
     public void setName(String name) {
         this.name = name;
     }
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "Student_Curs",
             joinColumns = @JoinColumn( name = "Student_ID", referencedColumnName = "ID" ),
             inverseJoinColumns = @JoinColumn (name = "Curs_ID", referencedColumnName = "ID"))
-    private List<CursEntity> getCursuri;
+    private List<CursEntity> cursuri;
 
     public List<CursEntity> getGetCursuri() {
-        return getCursuri;
+        return cursuri;
     }
 
     public void setGetCursuri(List<CursEntity> getCursuri) {
-        this.getCursuri = getCursuri;
+        this.cursuri = getCursuri;
     }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 @Local(interfaces.StudentBean.class)
 @Remote(StudentBeanR.class)
 public class StudentBean implements StudentBeanR, interfaces.StudentBean{
-    @PersistenceContext(unitName = "persistence")
+    @PersistenceContext(unitName = "ejb")
     private EntityManager manager;
     public StudentBean() {
     }
@@ -46,7 +46,7 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
     }
 
     @Override
-    public void updateStudent(Long id, String Newname) {
+    public void updateStudent(int id, String Newname) {
 
     }
     @Override
@@ -58,12 +58,12 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
         return (List<StudentEntity>) query.getResultList();
     }
     @Override
-    public StudentEntity findStud(Long id) {
+    public StudentEntity findStud(int id) {
         Query query = manager.createQuery("select s from StudentEntity s where s.id == "+ id );
         return (StudentEntity)query.getSingleResult();
     }
     @Override
-    public List<StudentEntity> findStudFromCurs(Long idCurs) {
+    public List<StudentEntity> findStudFromCurs(int idCurs) {
         Query query = manager.createQuery("select c.studenti from CursEntity c where c.id == "+ idCurs );
         return (List<StudentEntity>) query.getResultList();
     }
@@ -81,7 +81,7 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
         manager.remove(studentDTO);
     }
     @Override
-    public void updateStudentR(Long id, String Newname) {
+    public void updateStudentR(int id, String Newname) {
 
     }
 
@@ -96,13 +96,13 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
     }
 
     @Override
-    public StudentDTO findStudR(Long id) {
+    public StudentDTO findStudR(int id) {
 
         return convertEntityDTOStudent(findStud(id));
     }
 
     @Override
-    public List<StudentDTO> findStudFromCursR(Long idCurs) {
+    public List<StudentDTO> findStudFromCursR(int idCurs) {
         List<StudentDTO> studentDTOS = new ArrayList<StudentDTO>();
         for (StudentEntity studentEntity: findStudFromCurs(idCurs))
         {
@@ -140,7 +140,7 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
     {
         String[] sList = s.split(" ");
         StudentEntity studentEntity = new StudentEntity();
-        studentEntity.setId(Long.getLong(sList[0]));
+        studentEntity.setId(Integer.parseInt(sList[0]));
         studentEntity.setName(sList[1]);
         return studentEntity;
 

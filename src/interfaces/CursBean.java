@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface CursBean {
     public void insertCurs(String nume, int numarStudenti, String numeProfesor);
-    public void updateCurs(Long id, String nume, int numarStudenti, String numeProfesor);
+    public void updateCurs(int id, String nume, int numarStudenti, String numeProfesor);
     public void deleteCurs(CursEntity cursEntity);
-    public CursEntity findCurs(Long id);
+    public CursEntity findCurs(int id);
     public List<CursEntity> findAllCs();
-    public List<CursEntity> findAllCursForSt(Long idStudent);
+    public List<CursEntity> findAllCursForSt(int idStudent);
     public StudentDTO convertEntityDTOStudent(StudentEntity studentEntity);
     public CursDTO convertEntityDTOCurs(CursEntity cursEntity);
     public CursEntity convertStringToObject(String s);

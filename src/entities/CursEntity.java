@@ -9,17 +9,18 @@ import java.util.List;
 
 @Entity
 public class CursEntity implements Serializable{
-    private Long id = 1L;
+    @Id
+    @GeneratedValue
+    private int id ;
     private String nume = "";
     private int numarStudenti = 0;
     private String numeProfesor = "";
-    @Id
-    @GeneratedValue
-    public Long getId() {
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

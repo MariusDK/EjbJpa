@@ -21,6 +21,7 @@ import java.util.List;
 public class StudentServlet extends HttpServlet {
     @EJB
     private StudentBean studentBean;
+    @EJB
     private CursBean cursBean;
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String buton = request.getParameter("buton");

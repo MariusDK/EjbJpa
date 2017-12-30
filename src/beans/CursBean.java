@@ -17,6 +17,7 @@ import java.util.List;
 @Local(interfaces.CursBean.class)
 @Remote(CursBeanR.class)
 public class CursBean implements CursBeanR, interfaces.CursBean{
+    @PersistenceContext(unitName = "ejb")
     private EntityManager manager;
     public CursBean() {
     }
@@ -31,7 +32,7 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
     }
 
     @Override
-    public void updateCurs(Long id, String nume, int numarStudenti, String numeProfesor) {
+    public void updateCurs(int id, String nume, int numarStudenti, String numeProfesor) {
 
     }
 
@@ -41,7 +42,7 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
     }
 
     @Override
-    public CursEntity findCurs(Long id) {
+    public CursEntity findCurs(int id) {
         Query query = manager.createQuery("select c from CursEntity c where c.id=="+id);
         return (CursEntity) query.getSingleResult();
     }
@@ -53,7 +54,7 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
     }
 
     @Override
-    public List<CursEntity> findAllCursForSt(Long idStudent) {
+    public List<CursEntity> findAllCursForSt(int idStudent) {
         Query query = manager.createQuery("select s.getCursuri from StudentEntity s where s.id =="+ idStudent);
         return (List<CursEntity>) query.getResultList();
     }
@@ -68,7 +69,7 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
     }
 
     @Override
-    public void updateCursR(Long id, String nume, int numarStudenti, String numeProfesor) {
+    public void updateCursR(int id, String nume, int numarStudenti, String numeProfesor) {
 
     }
 
@@ -78,7 +79,7 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
     }
 
     @Override
-    public CursDTO findCursR(Long id) {
+    public CursDTO findCursR(int id) {
         return convertEntityDTOCurs(findCurs(id));
     }
 
@@ -93,7 +94,7 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
     }
 
     @Override
-    public List<CursDTO> findAllCursForStR(Long idStudent) {
+    public List<CursDTO> findAllCursForStR(int idStudent) {
         List<CursDTO> cursDTOList = new ArrayList<>();
         for (CursEntity cursEntity:findAllCursForSt(idStudent))
         {
@@ -131,7 +132,7 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
     {
         String[] sList = s.split(" ");
         CursEntity cursEntity = new CursEntity();
-        cursEntity.setId(Long.getLong(sList[0]));
+        cursEntity.setId(Integer.parseInt(sList[0]));
         cursEntity.setNume(sList[1]);
         cursEntity.setNumeProfesor(sList[2]);
         cursEntity.setNumarStudenti(Integer.parseInt(sList[3]));
