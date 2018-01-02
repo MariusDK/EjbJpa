@@ -19,5 +19,21 @@
         <servlet-name>CursServlet</servlet-name>
         <url-pattern>/CursServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>StudentServletJNDI</servlet-name>
+        <servlet-class>clients.StudentServletJNDI</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StudentServletJNDI</servlet-name>
+        <url-pattern>/StudentServletJNDI</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CursServletJNDI</servlet-name>
+        <servlet-class>clients.CursServletJNDI</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CursServletJNDI</servlet-name>
+        <url-pattern>/CursServletJNDI</url-pattern>
+    </servlet-mapping>
 
 </web-app>

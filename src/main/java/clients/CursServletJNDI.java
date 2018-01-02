@@ -1,16 +1,17 @@
 package clients;
 
-
-import entities.CursEntity;
-import entities.StudentEntity;
+import dtos.CursDTO;
+import dtos.StudentDTO;
 import interfaces.CursBean;
+import interfaces.CursBeanR;
 import interfaces.StudentBean;
+import interfaces.StudentBeanR;
+import jndi.GlassFishJNDI;
+import jndi.JNDI;
+import jndi.JbossJNDI;
 
-
-import javax.ejb.EJB;
-import javax.naming.Context;
+import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,28 +19,39 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.util.List;
 
-@WebServlet(name = "CursServlet")
-public class CursServlet extends HttpServlet
-{
-    @EJB
-    private StudentBean studentBean;
-    @EJB
-    private CursBean cursBean;
+@WebServlet(name = "CursServlerJNDI")
+public class CursServletJNDI extends HttpServlet {
+    private JNDI jndiProp;
+
+    private StudentBeanR studentBean;
+    private CursBeanR cursBean;
+    public CursServletJNDI() {
+        try {
+            jndiProp = new JbossJNDI();
+        } catch (NamingException e) {
+            try {
+                jndiProp = new GlassFishJNDI();
+            } catch (NamingException e1) {
+                e1.printStackTrace();
+            }
+        }
+        studentBean = jndiProp.getStudentBean();
+        cursBean = jndiProp.getCursBean();
+    }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("NAME");
         String prof = request.getParameter("PROF_NAME");
         String dep = request.getParameter("DEPARTAMENT");
         String buton = request.getParameter("buton");
-        getServletContext().setAttribute("cursList",cursBean.findAllCs());
+        getServletContext().setAttribute("cursList",cursBean.findAllCsR());
         response.setContentType("text/html");
         PrintWriter printWriter = response.getWriter();
         if (buton.equals("SAVE"))
         {
-            cursBean.insertCurs(name,0,prof,dep);
-            getServletContext().setAttribute("cursList",cursBean.findAllCs());
+            cursBean.insertCursR(name,0,prof,dep);
+            getServletContext().setAttribute("cursList",cursBean.findAllCsR());
             printWriter.println("Element salvat cu succes "+ name);
 
         }
@@ -50,14 +62,14 @@ public class CursServlet extends HttpServlet
             System.out.println(cursuri[0].toString());
             if (cursuri.length>1)
             {
-                RequestDispatcher requestDispatcher1 = request.getRequestDispatcher("/Curs.jsp");
+                RequestDispatcher requestDispatcher1 = request.getRequestDispatcher("/CursJNDI.jsp");
                 requestDispatcher1.include(request,response);
                 printWriter.append("<font color='red'><b>Eroare: Prea multe optiuni alese!</b></fond> ");
             }
             else
             {
-                cursBean.deleteCurs(cursBean.convertStringToObject(cursuri[0]));
-                getServletContext().setAttribute("cursList",cursBean.findAllCs());
+                cursBean.deleteCursR(cursBean.convertStringToObjectR(cursuri[0]));
+                getServletContext().setAttribute("cursList",cursBean.findAllCsR());
             }
         }
         if (buton.equals("SELECT"))
@@ -65,43 +77,42 @@ public class CursServlet extends HttpServlet
             String[] cursuri = request.getParameterValues("CURS");
             if (cursuri.length>1)
             {
-                RequestDispatcher requestDispatcher1 = request.getRequestDispatcher("/Curs.jsp");
+                RequestDispatcher requestDispatcher1 = request.getRequestDispatcher("/CursJNDI.jsp");
                 requestDispatcher1.include(request,response);
                 printWriter.append("<font color='red'><b>Eroare: Prea multe optiuni alese!</b></fond> ");
             }
             else
             {
-                CursEntity cursEntity = cursBean.convertStringToObject(cursuri[0]);
+                CursDTO cursDTO = cursBean.convertStringToObjectR(cursuri[0]);
                 response.setContentType("text/html");
-                if (cursEntity.getNumarStudenti()>0) {
-                    List<StudentEntity> studentEntityList = studentBean.findStudFromCurs(cursEntity.getId());
-                    for (StudentEntity studentEntity : studentEntityList) {
+                if (cursDTO.getNumarStudenti()>0) {
+                    List<StudentDTO> studentEntityList = studentBean.findStudFromCursR(cursDTO.getId());
+                    for (StudentDTO studentEntity : studentEntityList) {
                         printWriter.println(studentEntity.getId()+" "+studentEntity.getName()+"</br>");
                     }
 
                 }
                 else
                 {
-                    printWriter.println("Cursul "+cursEntity.getNume()+" nu are nici un student inscris");
+                    printWriter.println("Cursul "+cursDTO.getNume()+" nu are nici un student inscris");
                 }
             }
         }
         if (buton.equals("RESET"))
         {
-            getServletContext().setAttribute("cursList",cursBean.findAllCs());
-            RequestDispatcher requestDispatcher1 = request.getRequestDispatcher("/Curs.jsp");
+            getServletContext().setAttribute("cursList",cursBean.findAllCsR());
+            RequestDispatcher requestDispatcher1 = request.getRequestDispatcher("/CursJNDI.jsp");
             requestDispatcher1.include(request,response);
         }
         if (buton.equals("STUDENT PAGE"))
         {
-            getServletContext().setAttribute("cursList",cursBean.findAllCs());
-            RequestDispatcher requestDispatcher1 = request.getRequestDispatcher("/Student.jsp");
+            getServletContext().setAttribute("cursList",cursBean.findAllCsR());
+            RequestDispatcher requestDispatcher1 = request.getRequestDispatcher("/StudentJNDI.jsp");
             requestDispatcher1.include(request,response);
         }
         printWriter.close();
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        doPost(request,response);
     }
-
 }

@@ -15,7 +15,7 @@ import java.util.List;
 
 @Stateless(name = "StudentEJB")
 @Local(interfaces.StudentBean.class)
-//@Remote(StudentBeanR.class)
+@Remote(StudentBeanR.class)
 public class StudentBean implements StudentBeanR, interfaces.StudentBean{
     @PersistenceContext(unitName = "ejb")
     private EntityManager manager;
@@ -90,6 +90,7 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
         List<CursEntity> cursEntities = new ArrayList<>();
         for (CursDTO cursDTO:cursDTOList)
         {
+            System.out.println(cursDTO.toString());
             cursEntities.add(convertDTOEntityCurs(cursDTO));
         }
         insertStudent(name,varsta,departament, cursEntities);
@@ -195,5 +196,15 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
         }
         cursEntity.setStudenti(studentEntities);
         return cursEntity;
+    }
+    public StudentDTO convertStringToObjectR(String s)
+    {
+        String[] sList = s.split(" ");
+        StudentDTO studentDTO = new StudentDTO();
+        studentDTO.setId(Integer.parseInt(sList[0]));
+        studentDTO.setName(sList[1]);
+        studentDTO.setVarsta(Integer.parseInt(sList[2]));
+        studentDTO.setCNP(Integer.parseInt(sList[3]));
+        return studentDTO;
     }
 }

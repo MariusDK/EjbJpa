@@ -12,5 +12,6 @@ public interface StudentBeanR {
     public List<StudentDTO> findAllStudR();
     public StudentDTO findStudR(int id);
     public List<StudentDTO> findStudFromCursR(int idCurs);
+    public StudentDTO convertStringToObjectR(String s);
 
 }

@@ -17,7 +17,7 @@ import java.util.List;
 
 @Stateless(name = "CursEJB")
 @Local(interfaces.CursBean.class)
-//@Remote(CursBeanR.class)
+@Remote(CursBeanR.class)
 public class CursBean implements CursBeanR, interfaces.CursBean{
     @PersistenceContext(unitName = "ejb")
     private EntityManager manager;
@@ -127,12 +127,6 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
         cursDTO.setNume(cursEntity.getNume());
         cursDTO.setNumeProfesor(cursEntity.getNumeProfesor());
         cursDTO.setDepartament(cursEntity.getDepartament());
-        List<StudentDTO> studentDTOList = new ArrayList<StudentDTO>();
-        for (StudentEntity studentEntity: cursEntity.getStudenti())
-        {
-            studentDTOList.add(convertEntityDTOStudent(studentEntity));
-        }
-        cursDTO.setStudenti(studentDTOList);
         return cursDTO;
     }
     public CursEntity convertStringToObject(String s)
@@ -145,5 +139,17 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
         cursEntity.setNumarStudenti(Integer.parseInt(sList[2]));
         cursEntity.setDepartament(sList[4]);
         return cursEntity;
+    }
+    public CursDTO convertStringToObjectR(String s)
+    {
+        String[] sList = s.split(" ");
+        CursDTO cursDTO = new CursDTO();
+        cursDTO.setId(Integer.parseInt(sList[0]));
+        cursDTO.setNume(sList[1]);
+        cursDTO.setNumeProfesor(sList[3]);
+        cursDTO.setNumarStudenti(Integer.parseInt(sList[2]));
+        cursDTO.setDepartament(sList[4]);
+        return cursDTO;
+
     }
 }

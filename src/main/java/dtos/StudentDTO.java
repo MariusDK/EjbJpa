@@ -48,4 +48,9 @@ public class StudentDTO implements Serializable{
     public void setGetCursuri(List<CursDTO> getCursuri) {
         this.getCursuri = getCursuri;
     }
+    @Override
+    public String toString() {
+        return id + " " + name + " " + varsta + " " + CNP;
+    }
+
 }

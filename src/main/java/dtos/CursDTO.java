@@ -56,5 +56,12 @@ public class CursDTO implements Serializable{
         public void setStudenti(List<StudentDTO> studenti) {
             this.studenti = studenti;
         }
-
+    @Override
+    public String toString() {
+        return  id +
+                " " + nume +
+                " " + numarStudenti +
+                " " + numeProfesor +
+                " " + departament;
+    }
 }
