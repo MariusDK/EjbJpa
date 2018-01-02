@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="war" build-on-make="true" name="TemaEJB2">
+    <output-path>$PROJECT_DIR$/out/artifacts/TemaEJB2</output-path>
+    <root id="archive" name="TemaEJB2.war">
+      <element id="javaee-facet-resources" facet="TemaEJB/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="TemaEJB" />
+        </element>
+      </element>
+      <element id="dir-copy" path="$PROJECT_DIR$/src/main/resources/META-INF" />
+      <element id="javaee-facet-resources" facet="TemaEJB/ejb/EJB" />
+      <element id="javaee-facet-resources" facet="TemaEJB/web/Web" />
+      <element id="jpa-descriptors" facet="TemaEJB/jpa/JPA" />
+      <element id="module-output" name="TemaEJB" />
+    </root>
+  </artifact>
+</component>
