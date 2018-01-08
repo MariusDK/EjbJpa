@@ -80,6 +80,14 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
 
     @Override
     public void deleteCursR(CursDTO cursDTO) {
+        CursEntity cursEntity = new CursEntity();
+        cursEntity.setId(cursDTO.getId());
+        cursEntity.setNumarStudenti(cursDTO.getNumarStudenti());
+        cursEntity.setNume(cursDTO.getNume());
+        cursEntity.setNumeProfesor(cursDTO.getNumeProfesor());
+        cursEntity.setDepartament(cursDTO.getDepartament());
+
+        deleteCurs(cursEntity);
     }
 
     @Override
@@ -90,7 +98,7 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
     @Override
     public List<dtos.CursDTO> findAllCsR() {
         ArrayList<dtos.CursDTO> cursDTOList = new ArrayList<>();
-        for (entities.CursEntity cursEntity:findAllCs())
+        for (CursEntity cursEntity:findAllCs())
         {
             cursDTOList.add(convertEntityDTOCurs(cursEntity));
         }
@@ -123,6 +131,7 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
     public CursDTO convertEntityDTOCurs(CursEntity cursEntity)
     {
         CursDTO cursDTO = new CursDTO();
+        cursDTO.setId(cursEntity.getId());
         cursDTO.setNumarStudenti(cursEntity.getNumarStudenti());
         cursDTO.setNume(cursEntity.getNume());
         cursDTO.setNumeProfesor(cursEntity.getNumeProfesor());

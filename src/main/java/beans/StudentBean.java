@@ -32,17 +32,22 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
 
         //Adauga cursurile studentului
         //studentEntity.setGetCursuri(cursEntityList);
-        for (CursEntity cursEntity:cursEntityList)
-        {
-            CursEntity cursEntity1 = manager.find(CursEntity.class,cursEntity.getId());
-            int nrStudenti = cursEntity1.getNumarStudenti();
-            nrStudenti++;
-            cursEntity.setNumarStudenti(nrStudenti);
-            CursEntity cursEntity2 = manager.merge(cursEntity);
-            cursEntities.add(cursEntity1);
+        if (cursEntityList.size()!=0) {
+            for (CursEntity cursEntity : cursEntityList) {
+                CursEntity cursEntity1 = manager.find(CursEntity.class, cursEntity.getId());
+                int nrStudenti = cursEntity1.getNumarStudenti();
+                nrStudenti++;
+                cursEntity.setNumarStudenti(nrStudenti);
+                CursEntity cursEntity2 = manager.merge(cursEntity);
+                cursEntities.add(cursEntity1);
+            }
+            studentEntity.setCursuri(cursEntities);
+
+            manager.persist(studentEntity);
         }
-        studentEntity.setCursuri(cursEntities);
-        manager.persist(studentEntity);
+        else {
+            manager.persist(studentEntity);
+        }
     }
     @Override
     public void deleteStudent(StudentEntity studentEntity) {
@@ -132,15 +137,16 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
     public StudentDTO convertEntityDTOStudent(StudentEntity studentEntity)
     {
         StudentDTO studentDTO = new StudentDTO();
+        studentDTO.setId(studentEntity.getId());
         studentDTO.setName(studentEntity.getName());
         studentDTO.setVarsta(studentEntity.getVarsta());
         studentDTO.setCNP(studentEntity.getCNP());
-        List<CursDTO> cursDTOList = new ArrayList<>();
-        for (CursEntity cursEntity:studentEntity.getCursuri())
-        {
-            cursDTOList.add(convertEntityDTOCurs(cursEntity));
-        }
-        studentDTO.setGetCursuri(cursDTOList);
+//        List<CursDTO> cursDTOList = new ArrayList<>();
+//        for (CursEntity cursEntity:studentEntity.getCursuri())
+//        {
+//            cursDTOList.add(convertEntityDTOCurs(cursEntity));
+//        }
+//        studentDTO.setGetCursuri(cursDTOList);
         return studentDTO;
     }
     public CursDTO convertEntityDTOCurs(CursEntity cursEntity)
@@ -151,11 +157,11 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
         cursDTO.setNumeProfesor(cursEntity.getNumeProfesor());
         cursDTO.setDepartament(cursEntity.getDepartament());
         List<StudentDTO> studentDTOList = new ArrayList<StudentDTO>();
-        for (StudentEntity studentEntity: cursEntity.getStudenti())
-        {
-            studentDTOList.add(convertEntityDTOStudent(studentEntity));
-        }
-        cursDTO.setStudenti(studentDTOList);
+//        for (StudentEntity studentEntity: cursEntity.getStudenti())
+//        {
+//            studentDTOList.add(convertEntityDTOStudent(studentEntity));
+//        }
+//        cursDTO.setStudenti(studentDTOList);
         return cursDTO;
     }
     public StudentEntity convertStringToObject(String s)
@@ -185,16 +191,11 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
     public CursEntity convertDTOEntityCurs(CursDTO cursDTO)
     {
         CursEntity cursEntity = new CursEntity();
+        cursEntity.setId(cursDTO.getId());
         cursEntity.setNume(cursDTO.getNume());
         cursEntity.setNumarStudenti(cursDTO.getNumarStudenti());
         cursEntity.setNumeProfesor(cursDTO.getNumeProfesor());
         cursEntity.setDepartament(cursDTO.getDepartament());
-        List<StudentEntity> studentEntities = new ArrayList<>();
-        for (StudentDTO studentDTO:cursDTO.getStudenti())
-        {
-            studentEntities.add(convertEntityStudentDTO(studentDTO));
-        }
-        cursEntity.setStudenti(studentEntities);
         return cursEntity;
     }
     public StudentDTO convertStringToObjectR(String s)

@@ -58,7 +58,9 @@ public class StudentServletJNDI extends HttpServlet{
 
         if (buton.equals("SAVE")) {
 
-            String[] cursSelectedList = request.getParameterValues("CURS");
+             String[] cursSelectedList = null;
+            cursSelectedList = request.getParameterValues("CURS");
+            System.out.println(cursSelectedList+"     "+cursSelectedList.length);
             if (cursSelectedList.length>0) {
                 List<CursDTO> cursDTOS = new ArrayList<>();
 
