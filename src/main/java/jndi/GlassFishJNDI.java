@@ -9,8 +9,8 @@ import javax.naming.NamingException;
 import java.util.Properties;
 
 public class GlassFishJNDI implements JNDI{
-    private String JNDICurs = "java:global/TemaEJB-1.0-SNAPSHOT/CursBean!interfaces.CursBeanR";
-    private String JNDIStudent = "java:global/TemaEJB-1.0-SNAPSHOT/StudentBean!interfaces.StudentBeanR";
+    private String JNDICurs = "java:global/TemaEJB-1.0-SNAPSHOT/CursEJB!interfaces.CursBeanR";
+    private String JNDIStudent = "java:global/TemaEJB-1.0-SNAPSHOT/StudentEJB!interfaces.StudentBeanR";
     private CursBeanR cursBeanR;
     private StudentBeanR studentBeanR;
     public GlassFishJNDI() throws NamingException

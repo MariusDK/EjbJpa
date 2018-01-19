@@ -2,7 +2,7 @@ package dtos;
 
 import java.io.Serializable;
 import java.util.List;
-
+/** clonă a clasei CursEntity, folosită de interfața remote CursBeanR*/
 public class CursDTO implements Serializable{
 
         private int id ;

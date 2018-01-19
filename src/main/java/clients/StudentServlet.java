@@ -19,6 +19,7 @@ import java.util.List;
 
 @WebServlet(name = "StudentServlet")
 public class StudentServlet extends HttpServlet {
+    //injectare EJB
     @EJB
     private StudentBean studentBean;
     @EJB

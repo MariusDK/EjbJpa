@@ -27,6 +27,7 @@ public class CursServletJNDI extends HttpServlet {
 
     private StudentBeanR studentBean;
     private CursBeanR cursBean;
+    // conexiunea cu bean-uri și interfețe remote
     public CursServletJNDI() {
         try {
             jndiProp = new JbossJNDI();

@@ -12,16 +12,22 @@ import javax.ejb.Stateless;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
+/** În bean-ul StudentBean implementăm perechea de interfețe:
+ * StudentBean (locală) și StudentBeanR (remote)
+ *
+ * */
 @Stateless(name = "StudentEJB")
 @Local(interfaces.StudentBean.class)
 @Remote(StudentBeanR.class)
 public class StudentBean implements StudentBeanR, interfaces.StudentBean{
+    /** declarăm numele unității de persistență */
     @PersistenceContext(unitName = "ejb")
+    /** definim un EntityManager */
     private EntityManager manager;
     public StudentBean() {
     }
-
+    /** Implementăm metodele interfeței locale StudentBean
+     inserăm un student în baza de date */
     @Override
     public void insertStudent(String name,int varsta,int CNP, List<CursEntity> cursEntityList) {
         StudentEntity studentEntity = new StudentEntity();
@@ -49,8 +55,10 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
             manager.persist(studentEntity);
         }
     }
+    /** stergem un student din baza de date */
     @Override
     public void deleteStudent(StudentEntity studentEntity) {
+        studentEntity = manager.merge(studentEntity);
         List<CursEntity> cursEntities = studentEntity.getCursuri();
         for (CursEntity cursEntity:cursEntities)
         {
@@ -59,13 +67,13 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
             cursEntity.setNumarStudenti(nrStudenti);
             manager.merge(cursEntity);
         }
-        manager.remove(manager.merge(studentEntity));
+        manager.remove(studentEntity);
     }
 
     @Override
     public void updateStudent(StudentEntity studentEntity) {
-
     }
+    /** afișăm lista de studenți din baza de date */
     @Override
     public List<StudentEntity> findAllStud() {
 
@@ -74,11 +82,13 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
 //                "select s from StudentEntity s ", StudentEntity.class);
         return (List<StudentEntity>) query.getResultList();
     }
+    /** căutăm un student după id și-l returnăm*/
     @Override
     public StudentEntity findStud(int id) {
         Query query = manager.createQuery("select s from StudentEntity s where s.id == "+ id );
         return (StudentEntity)query.getSingleResult();
     }
+    /** afișăm lista de studenți corespunzătoare unui Curs */
     @Override
     public List<StudentEntity> findStudFromCurs(int idCurs) {
          CursEntity cursEntity = manager.find(CursEntity.class,idCurs);
@@ -90,6 +100,9 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
          }
          return studentEntities;
     }
+    /** implementăm metodele interfeței remote StudentBeanR
+     * inserăm un  StudentDTO folosind metoda insertCurs()
+     */
     @Override
     public void insertStudentR(String name,int varsta,int departament, List<CursDTO> cursDTOList) {
         List<CursEntity> cursEntities = new ArrayList<>();
@@ -100,15 +113,24 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
         }
         insertStudent(name,varsta,departament, cursEntities);
     }
+    /** stergem un student din baza de date
+     * folosind metoda deleteStudent()
+     * pentru asta il convertim din DTO
+     * in Entity
+     * */
     @Override
     public void deleteStudentR(StudentDTO studentDTO) {
+        StudentEntity studentEntity = convertEntityStudentDTO(studentDTO);
+        deleteStudent(studentEntity);
 
     }
     @Override
     public void updateStudentR(int id, String Newname) {
 
     }
-
+    /**
+     * Afisăm toți studenții
+     * */
     @Override
     public List<StudentDTO> findAllStudR() {
         List<StudentDTO> studentDTOS = new ArrayList<StudentDTO>();
@@ -118,13 +140,18 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
         }
         return studentDTOS;
     }
-
+    /**
+     * Afisăm un student cu un id dat
+     * */
     @Override
     public StudentDTO findStudR(int id) {
 
         return convertEntityDTOStudent(findStud(id));
     }
-
+    /**
+     * Afisăm toți studentii ai unui curs
+     * cu un id dat idCurs
+     * */
     @Override
     public List<StudentDTO> findStudFromCursR(int idCurs) {
         List<StudentDTO> studentDTOS = new ArrayList<StudentDTO>();
@@ -134,6 +161,9 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
         }
         return studentDTOS;
     }
+    /**
+     * Convertim din StudentEntity în StudentDTO
+     * */
     public StudentDTO convertEntityDTOStudent(StudentEntity studentEntity)
     {
         StudentDTO studentDTO = new StudentDTO();
@@ -149,6 +179,9 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
 //        studentDTO.setGetCursuri(cursDTOList);
         return studentDTO;
     }
+    /**
+     * Convertim din CursEntity în CursDTO
+     * */
     public CursDTO convertEntityDTOCurs(CursEntity cursEntity)
     {
         CursDTO cursDTO = new CursDTO();
@@ -164,6 +197,9 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
 //        cursDTO.setStudenti(studentDTOList);
         return cursDTO;
     }
+    /**
+     * Convertim din String în StudentEntity
+     * */
     public StudentEntity convertStringToObject(String s)
     {
         String[] sList = s.split(" ");
@@ -174,6 +210,10 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
         studentEntity.setCNP(Integer.parseInt(sList[3]));
         return studentEntity;
     }
+    /**
+     * Convertim din StudentDTO în StudentEntity
+     * */
+
     public StudentEntity convertEntityStudentDTO(StudentDTO studentDTO)
     {
         StudentEntity studentEntity = new StudentEntity();
@@ -188,6 +228,9 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
         studentEntity.setCursuri(cursEntitiesList);
         return studentEntity;
     }
+    /**
+     * Convertim din CursDTO în CursEntity
+     * */
     public CursEntity convertDTOEntityCurs(CursDTO cursDTO)
     {
         CursEntity cursEntity = new CursEntity();
@@ -198,6 +241,9 @@ public class StudentBean implements StudentBeanR, interfaces.StudentBean{
         cursEntity.setDepartament(cursDTO.getDepartament());
         return cursEntity;
     }
+    /**
+     * Convertim din String în DTO
+     * */
     public StudentDTO convertStringToObjectR(String s)
     {
         String[] sList = s.split(" ");

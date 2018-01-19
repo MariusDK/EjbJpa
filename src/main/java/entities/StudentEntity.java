@@ -47,6 +47,10 @@ public class StudentEntity implements Serializable{
         this.CNP = CNP;
     }
 
+    /**
+    Creem tabelul de legătură Student_Curs și legăm toate cele trei tabele prin id-uri,
+    astfel obținem o relație între tabele de tip Many To Many bidirecțional.
+     */
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "Student_Curs",

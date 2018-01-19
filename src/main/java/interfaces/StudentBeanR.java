@@ -3,6 +3,7 @@ package interfaces;
 import dtos.CursDTO;
 import dtos.StudentDTO;
 
+import javax.ejb.Remote;
 import java.util.List;
 
 public interface StudentBeanR {

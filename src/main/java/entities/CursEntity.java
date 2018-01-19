@@ -9,9 +9,12 @@ import java.util.List;
 
 @Entity
 public class CursEntity implements Serializable{
-    @Id
 
-    //@GeneratedValue(strategy= GenerationType.IDENTITY)
+    /**cheia primară se adnotează cu @Id
+     prin proprietatea @GeneratedValue, cheia primară id se autoincremetează,
+     cu strategia IDENTITY, incrementarea cheilor celor două tabele este diferită.
+    */
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id ;
     private String nume = "";
@@ -58,7 +61,9 @@ public class CursEntity implements Serializable{
         this.departament = departament;
     }
 
+
     @ManyToMany(mappedBy = "cursuri")
+    // din cauza legaturii ManyToMany bidirectională fiecare curs are o listă de studenți de tipul StudentEntity
     private List<StudentEntity> studenti;
     public List<StudentEntity> getStudenti() {
         return studenti;

@@ -3,6 +3,7 @@ package dtos;
 import java.io.Serializable;
 import java.util.List;
 
+/** clonă a clasei StudentEntity, folosită de interfața remote StudentBeanR*/
 public class StudentDTO implements Serializable{
     private int id ;
     private String name = "";

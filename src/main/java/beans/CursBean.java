@@ -15,15 +15,23 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/** În bean-ul CursBean implementăm perechea de interfețe:
+ * CursBean (locală) și CursBeanR (remote)
+ *
+ * */
 @Stateless(name = "CursEJB")
 @Local(interfaces.CursBean.class)
 @Remote(CursBeanR.class)
 public class CursBean implements CursBeanR, interfaces.CursBean{
+    /** declarăm numele unității de persistență */
     @PersistenceContext(unitName = "ejb")
+    /** definim un EntityManager */
     private EntityManager manager;
     public CursBean() {
     }
-
+    /** Implementăm metodele interfeței locale CursBean
+        inserăm un curs în baza de date */
     @Override
     public void insertCurs(String nume, int numarStudenti, String numeProfesor, String departament) {
         CursEntity cursEntity = new CursEntity();
@@ -38,25 +46,25 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
     public void updateCurs(CursEntity cursEntity) {
 
     }
-
+    /** stergem un curs din baza de date */
     @Override
     public void deleteCurs(CursEntity cursEntity) {
         manager.remove(manager.merge(cursEntity));
     }
-
+    /** căutăm un curs după id și-l returnăm*/
     @Override
     public CursEntity findCurs(int id) {
         Query query = manager.createQuery("select c from CursEntity c where c.id=="+id);
 
         return (entities.CursEntity) query.getSingleResult();
     }
-
+    /** afișăm lista de cursuri din baza de date */
     @Override
     public List<CursEntity> findAllCs() {
         Query query = manager.createQuery("select c from CursEntity c");
         return (List<CursEntity>) query.getResultList();
     }
-
+    /** afișăm lista de cursuri corespunzătoare unui Student */
     @Override
     public List<CursEntity> findAllCursForSt(int idStudent) {
         StudentEntity studentEntity = manager.find(StudentEntity.class,idStudent);
@@ -68,16 +76,24 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
 
         return cursEntities;
     }
-    ////////////////REMOTE
+    /** implementăm metodele interfeței remote CursBeanR
+     * inserăm un  CursDTO folosind metoda
+     * insertCurs()
+    */
     @Override
     public void insertCursR(String nume, int numarStudenti, String numeProfesor, String departament) {
         insertCurs(nume,numarStudenti,numeProfesor,departament);
     }
+
     @Override
     public void updateCursR(CursDTO cursDTO) {
 
     }
-
+    /**
+     * convertim un CursDTO în CursEntity
+     * stergem cursul folosind metoda
+     * deleteCurs()
+     * */
     @Override
     public void deleteCursR(CursDTO cursDTO) {
         CursEntity cursEntity = new CursEntity();
@@ -89,12 +105,20 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
 
         deleteCurs(cursEntity);
     }
-
+    /**
+     * returnăm un CursEntity căutat în baza de date după id
+     * il convertim în CursDTO și-l returnăm
+     * */
     @Override
     public dtos.CursDTO findCursR(int id) {
         return convertEntityDTOCurs(findCurs(id));
     }
-
+    /**
+     * returnăm toate cursurile folosind metoda findAllCs()
+     * într-o listă de obiecte de tipul CursEntity
+     * pe care le convertim apoi
+     * în o listă de obecte de tipul CursDTO
+     * */
     @Override
     public List<dtos.CursDTO> findAllCsR() {
         ArrayList<dtos.CursDTO> cursDTOList = new ArrayList<>();
@@ -105,6 +129,13 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
         return cursDTOList;
     }
 
+    /**
+     * returnăm toate cursurile pentru un student
+     * cu id-ul idStudent folosind metoda findAllCursSt(idStudent)
+     * într-o listă de obiecte de tipul CursEntity
+     * pe care le convertim apoi
+     * în o listă de obecte de tipul CursDTO
+     * */
     @Override
     public List<dtos.CursDTO> findAllCursForStR(int idStudent) {
         List<dtos.CursDTO> cursDTOList = new ArrayList<>();
@@ -114,6 +145,10 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
         }
         return cursDTOList;
     }
+    /**
+     * metodă de a converti un StudentEntity
+     * într-un StudentDTO
+     */
     public dtos.StudentDTO convertEntityDTOStudent(StudentEntity studentEntity)
     {
         dtos.StudentDTO studentDTO = new dtos.StudentDTO();
@@ -128,6 +163,10 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
         studentDTO.setGetCursuri(cursDTOList);
         return studentDTO;
     }
+    /**
+     * metodă de a converti un CursEntity
+     * într-un CursDTO
+     */
     public CursDTO convertEntityDTOCurs(CursEntity cursEntity)
     {
         CursDTO cursDTO = new CursDTO();
@@ -138,6 +177,10 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
         cursDTO.setDepartament(cursEntity.getDepartament());
         return cursDTO;
     }
+    /**
+     * metodă de a converti obiecte de tipul String în
+     * obiecte de tip-ul CursEntity
+     */
     public CursEntity convertStringToObject(String s)
     {
         String[] sList = s.split(" ");
@@ -149,6 +192,10 @@ public class CursBean implements CursBeanR, interfaces.CursBean{
         cursEntity.setDepartament(sList[4]);
         return cursEntity;
     }
+    /**
+     * metodă de a converti obiecte de tipul String în
+     * obiecte de tip-ul CursDTO
+     */
     public CursDTO convertStringToObjectR(String s)
     {
         String[] sList = s.split(" ");

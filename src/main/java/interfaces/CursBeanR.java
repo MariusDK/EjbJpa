@@ -5,6 +5,7 @@ import dtos.StudentDTO;
 import entities.CursEntity;
 import entities.StudentEntity;
 
+import javax.ejb.Remote;
 import java.util.List;
 
 public interface CursBeanR {
